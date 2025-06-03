@@ -136,3 +136,5 @@ dist
 .pnp.*
 
 config/
+output/
+.DS_Store

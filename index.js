@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import * as fs from 'fs/promises';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as fontkit from 'fontkit';
 import io from './lib/io.js';
@@ -11,6 +11,7 @@ async function main() {
     console.log(`创建任务配置文件config/text.yaml,请配置任务信息`);
     return;
   }
+  io.mkdir("output")
   console.log('开始任务........................');
   const searchDirectory = config.path;
   await merge('滴滴电子发票', searchDirectory, config);
@@ -35,7 +36,7 @@ function searchPDFs(dir, keyword) {
 
 async function addText(pdfDoc, x, y, text) {
   // 加载中文字体，这里使用宋体
-  const fontBytes = fs.readFileSync(path.join(__dirname, 'simsun.ttf'));
+  const fontBytes = fs.readFileSync(path.join('ttf', 'simsun.ttf'));
   const font = await pdfDoc.embedFont(fontBytes);
 
   // 遍历文档中的每一页
@@ -81,7 +82,7 @@ async function merge(keyword, searchDir, config) {
     console.log('未找到包含关键词的 PDF 文件。');
     return;
   }
-  const outputPDF = path.join(__dirname, keyword + '_merged.pdf');
+  const outputPDF = path.join('output', keyword + '_merged.pdf');
   await mergePDFs(pdfFiles, outputPDF, config);
   console.error('合并完成:', keyword);
 }
